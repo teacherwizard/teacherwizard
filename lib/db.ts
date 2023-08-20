@@ -1,27 +1,22 @@
-import { drizzle } from "drizzle-orm/planetscale-serverless";
-import { connect } from "@planetscale/database";
-import {
-  mysqlTable,
-  serial,
-  varchar,
-  boolean,
-  json,
-} from "drizzle-orm/mysql-core";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon, neonConfig } from "@neondatabase/serverless";
+
+import { pgTable, serial, varchar, boolean, json } from "drizzle-orm/pg-core";
 import { InferModel } from "drizzle-orm";
 
-const connection = connect({
-  host: process.env.DATABASE_HOST,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
-});
+neonConfig.fetchConnectionCache = true;
+
+const connection = neon(
+  "postgres://teacherwizard:8khMNTd6LzOs@ep-billowing-darkness-02559959.eu-central-1.aws.neon.tech/neondb"
+);
 
 export const db = drizzle(connection);
 
-export const assignment = mysqlTable("assignment", {
-  id: serial("id").primaryKey(),
-  title: varchar("title", { length: 256 }),
-  description: varchar("description", { length: 256 }),
-  userId: varchar("userId", { length: 256 }),
+export const assignment = pgTable("assignment", {
+  id: serial("id").primaryKey().unique().notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: varchar("description", { length: 256 }).notNull(),
+  userId: varchar("userId", { length: 256 }).notNull(),
   blocks: json("blocks"),
   public: boolean("public").default(false),
 });

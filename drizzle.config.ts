@@ -3,9 +3,15 @@ import type { Config } from "drizzle-kit";
 export default {
   schema: "./lib/db.ts",
   out: "./drizzle",
-  driver: "mysql2",
+  driver: "pg",
   dbCredentials: {
-    connectionString:
-      'mysql://gywn0p4y3ijrfgo12v2j:pscale_pw_ns1hj8ROdMJkpiCamdKbqMt6yxTtdOqxw6qZtCzit4n@aws.connect.psdb.cloud/teacherwizard?ssl={"rejectUnauthorized":true}',
+    host: "ep-billowing-darkness-02559959.eu-central-1.aws.neon.tech",
+    port: 5432,
+    user: "teacherwizard",
+    password: "8khMNTd6LzOs",
+    database: "neondb",
+    ssl: true,
+    /* connectionString:
+      "postgres://teacherwizard:8khMNTd6LzOs@ep-billowing-darkness-02559959.eu-central-1.aws.neon.tech/neondb?sslmode='require'", */
   },
 } satisfies Config;

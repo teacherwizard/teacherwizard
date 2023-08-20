@@ -3,18 +3,43 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { getAssignments } from "@/queries/get-assignments";
 import { createAssignment } from "@/server/actions/create-assignment";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CreateAssignmentForm } from "@/components/create-assignment-form";
 
-export default async function Assignments() {
+export default async function Assignments({
+  searchParams,
+}: Record<string, string | string[] | undefined>) {
   const assignments = await getAssignments();
+  console.log(searchParams?.dialog);
 
   return (
     <>
       <h1>Assignments</h1>
       <Link href="/">Dashboard</Link>
+      <Link href="/dashboard/assignments?newAssignment=true">Dialog</Link>
+      {searchParams?.newAssignment && (
+        <Dialog defaultOpen={true}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>New Assignment</DialogTitle>
+            </DialogHeader>
+            <CreateAssignmentForm />
+            <DialogFooter>
+              <Link href="/dashboard/assignments">Cancel</Link>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
       <UserButton afterSignOutUrl="/" />
-      <form action={createAssignment}>
-        <button type="submit">New Assignment</button>
-      </form>
+
       {assignments.map((assignment) => (
         <div key={assignment.id} className="flex flex-row items-center">
           <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
